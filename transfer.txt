@@ -1,0 +1,1 @@
+Smart object recognition: AI/ML could be used to recognize objects that are drawn on the Samsung Flip and automatically convert them into pre-defined shapes, such as circles or squares. This could save users time when creating diagrams and other visual content.
