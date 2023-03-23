@@ -1,1 +1,81 @@
 Smart object recognition: AI/ML could be used to recognize objects that are drawn on the Samsung Flip and automatically convert them into pre-defined shapes, such as circles or squares. This could save users time when creating diagrams and other visual content.
+
+
+
+
+        serviceIntent = Intent()
+        serviceIntent!!.component = ComponentName("com.example.serviceside",
+            "com.example.serviceside.MyService")
+            
+            
+            
+            
+            
+    private fun bindToRomoteService() {
+        Log.d(TAG, "binding to Remote Service ${serviceIntent!!.component}")
+        if(bindService(serviceIntent, randomNumberServiceConnection!!, BIND_AUTO_CREATE))
+            Toast.makeText(mContext, "Service bound", Toast.LENGTH_SHORT).show()
+
+        else{
+            Toast.makeText(mContext, "Service cant be binded", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    var randomNumberServiceConnection: ServiceConnection? = object : ServiceConnection {
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            randomNumberRequestMessenger = null
+            randomNumberReceiveMessenger = null
+            mIsBound = false
+        }
+
+        override fun onServiceConnected(arg0: ComponentName, binder: IBinder) {
+            Log.d(TAG, " ${serviceIntent?.component} service connected ")
+            randomNumberRequestMessenger = Messenger(binder)
+            randomNumberReceiveMessenger = Messenger(RecieveRandomNumberHandler())
+            mIsBound = true
+        }
+    }
+    
+      <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.example.serviceside.ACTION_BIND" />
+            </intent-filter>
+        </service>
+    
+    
+    
+    ########################################
+###############################################
+
+
+  <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name=".MyService"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.example.serviceside.ACTION_BIND" />
+            </intent-filter>
+        </service>
+
+   
