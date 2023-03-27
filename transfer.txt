@@ -207,6 +207,12 @@ class MyService : Service() {
     
     
     
+java.io.IOException: Cannot run program "adb": error=13, Permission denied
+2023-03-27 15:16:06.222  4870-4870  System.err              com.example.serviceside              W  	at java.lang.ProcessBuilder.start(ProcessBuilder.java:983)
+2023-03-27 15:16:06.222  4870-4870  System.err              com.example.serviceside              W  	at java.lang.Runtime.exec(Runtime.java:691)
+2023-03-27 15:16:06.222  4870-4870  System.err              com.example.serviceside              W  	at java.lang.Runtime.exec(Runtime.java:524)
+2023-03-27 15:16:06.222  4870-4870  System.err              com.example.serviceside              W  	at java.lang.Runtime.exec(Runtime.java:421)
+    
 
 
 
