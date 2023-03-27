@@ -218,7 +218,7 @@ java.io.IOException: Cannot run program "adb": error=13, Permission denied
 
 
 
-
+ sh: resetreason: can't execute: Permission denied
 
  
 
