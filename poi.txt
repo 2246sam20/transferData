@@ -1,0 +1,59 @@
+    private File[] generateImg(File outputDir,
+                               SlideShow slideShow) throws IOException {
+        //创建输出目录
+        while(outputDir.exists()){
+            outputDir = new File(outputDir.getParent(),
+                    UUID.randomUUID().toString());
+        }
+        outputDir.mkdirs();
+
+
+        //生成每个文件实际的起始和结束位置
+        //如果start和end的设置值为负的话，表示是是倒数第几页，例-1表示最后一页
+        List<Slide> slides = slideShow.getSlides();
+        int realStart = start<0?start+slides.size():start;
+        int realEnd = end<0?end+slides.size():end;
+        //起始点不在范围内或者结束位置不合理
+        if (realStart<0 || realEnd<0 || realStart>= slides.size() || realStart > realEnd){
+            return new File[0];
+        }
+        //只要起始点处于有效范围即可，终点值如超出范围则置为最后一页
+        if (realEnd >= slides.size()){
+            realEnd = slides.size()-1 ;
+        }
+
+        //根据幻灯片的分辨率和预先的设置以生成实际输出图片的分辨率
+        //一旦设置width和height，则ratio的设置无效
+        Dimension pageSize = slideShow.getPageSize();
+        int realWidth;
+        int realHeight;
+        if (width == null){
+            realHeight = height==null?(int)(pageSize.height*ratio):height;
+            realWidth = height==null?(int)(pageSize.width*ratio):height*pageSize.width/pageSize.height;
+        }else{
+            realWidth = width;
+            realHeight = height==null? width*pageSize.height/pageSize.width:height;
+        }
+
+        //放大特定倍数倍以提高图片清晰度，图片文件体积也会随之增大
+        BufferedImage bufferedImg = new BufferedImage(pageSize.width* scale,
+                pageSize.height* scale,BufferedImage.TYPE_INT_RGB);
+        File[] outputImgs = new File[realEnd-realStart+1];
+        //开始逐页生成图片
+        Graphics2D graphics = bufferedImg.createGraphics();
+        graphics.scale(scale, scale);
+        graphics.setPaint(Color.white);
+        for (int i = realStart; i <= realEnd; i++) {
+            //即用刷填充背景为白色，否则如果ppt背景是透明的话，会有上次绘图留下的背景
+            graphics.fill(new Rectangle2D.Float(0, 0,
+                    pageSize.width * scale, pageSize.height * scale));
+            slides.get(i).draw(graphics);
+            //压缩并保存为文件
+            File outputImg = new File(outputDir,i+imgFormat);
+            Thumbnails.of(bufferedImg)
+                    .size(realWidth,realHeight)
+                    .toFile(outputImg);
+            outputImgs[i-realStart]=outputImg;
+        }
+        return outputImgs;
+    }
